@@ -1,8 +1,9 @@
 My groupmembers are:
 - rin pereira
-- XXXX
-- XXXX
-- XXXX
-
+- sarah ross
+- bobby khleang
+- george williams
+- dylan burton
+- omaid ghafoori
 
 ------------------ Fill in some information about your project under this ------------------
