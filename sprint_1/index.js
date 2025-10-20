@@ -1,94 +1,84 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // redirect for register and login pages
-  const registerNavBtn = document.getElementById("register-button");
-  const loginNavBtn = document.getElementById("login-button");
+// index.js — feature-parity with inline if checks
+document.addEventListener('DOMContentLoaded', () => {
 
+  // --- helpers ---
+  const getUsers = () => {
+    try {
+      const raw = localStorage.getItem('users');
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const saveUsers = (users) => {
+    localStorage.setItem('users', JSON.stringify(users));
+  };
+
+  // --- nav on homepage ---
+  const registerNavBtn = document.getElementById('register-button');
   if (registerNavBtn) {
-    registerNavBtn.addEventListener("click", () => {
-      window.location.href = "register.html";
-    });
+    registerNavBtn.addEventListener('click', () => (window.location.href = 'register.html'));
   }
-
+  const loginNavBtn = document.getElementById('login-button');
   if (loginNavBtn) {
-    loginNavBtn.addEventListener("click", () => {
-      window.location.href = "login.html";
+    loginNavBtn.addEventListener('click', () => (window.location.href = 'login.html'));
+  }
+
+  // --- register page ---
+  const registerBtn = document.getElementById('register-account-button');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', () => {
+      const email = String(document.getElementById('email')?.value ?? '').trim();
+      const username = String(document.getElementById('username')?.value ?? '').trim();
+      const password = String(document.getElementById('password')?.value ?? '');
+
+      if (!email || !username || !password) {
+        alert('please fill out email, username, and password.');
+        return;
+      }
+
+      // inline-if style email validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('please enter a valid email.');
+        return;
+      }
+
+      const users = getUsers();
+      const emailTaken = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+      const usernameTaken = users.some(u => u.username.toLowerCase() === username.toLowerCase());
+      if (emailTaken) { alert('that email is already registered.'); return; }
+      if (usernameTaken) { alert('that username is already taken.'); return; }
+
+      users.push({ email, username, password });
+      saveUsers(users);
+      alert('account created! redirecting to login…');
+      window.location.href = 'login.html';
     });
   }
 
-  // page-specific buttons
-  const registerAccountBtn = document.getElementById("register-account-button");
-  if (registerAccountBtn) {
-    registerAccountBtn.addEventListener("click", registerUser);
-  }
+  // --- login page ---
+  const loginBtn = document.getElementById('login-account-button');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
+      const username = String(document.getElementById('login-username')?.value ?? '').trim();
+      const password = String(document.getElementById('login-password')?.value ?? '');
 
-  const loginAccountBtn = document.getElementById("login-account-button");
-  if (loginAccountBtn) {
-    loginAccountBtn.addEventListener("click", loginFromPage);
+      if (!username || !password) {
+        alert('make sure you fill both username and password!');
+        return;
+      }
+
+      const users = getUsers();
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        localStorage.setItem('loggedInUser', user.username);
+        alert(`welcome, ${user.username}!`);
+        window.location.href = 'homepage.html';
+      } else {
+        alert('invalid username/password.');
+      }
+    });
   }
 });
-
-// helpers
-function getUsers() {
-  try {
-    return JSON.parse(localStorage.getItem("users")) || [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveUsers(users) {
-  localStorage.setItem("users", JSON.stringify(users));
-}
-
-// registration handler
-function registerUser() {
-  const userEmail = document.getElementById("email");
-  const userUsername = document.getElementById("username");
-  const userPassword = document.getElementById("password");
-
-  const email = userEmail ? userEmail.value.trim() : "";
-  const username = userUsername ? userUsername.value.trim() : "";
-  const password = userPassword ? userPassword.value.trim() : "";
-
-  if (!email || !username || !password) {
-    alert("looks like you didn't fill in all the blanks. try again!");
-    return;
-  }
-
-  const users = getUsers();
-  const duplicate = users.find(u => u.username === username || u.email === email);
-
-  if (duplicate) {
-    alert("username/email already taken!");
-    return;
-  }
-
-  users.push({ email, username, password, healthData: [] });
-  saveUsers(users);
-  alert("account registration successful.");
-}
-
-// login handler
-function loginFromPage() {
-  const usernameEl = document.getElementById("login-username");
-  const passwordEl = document.getElementById("login-password");
-
-  const username = usernameEl ? usernameEl.value.trim() : "";
-  const password = passwordEl ? passwordEl.value.trim() : "";
-
-  if (!username || !password) {
-    alert("make sure you fill both username and password!");
-    return;
-  }
-
-  const users = getUsers();
-  const user = users.find(u => u.username === username && u.password === password);
-
-  if (user) {
-    localStorage.setItem("loggedInUser", user.username);
-    alert(`welcome, ${user.username}!`);
-    window.location.href = "homepage.html";
-  } else {
-    alert("invalid username/password.");
-  }
-}
