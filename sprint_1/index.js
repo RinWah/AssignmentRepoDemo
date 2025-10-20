@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // safe element lookups
+  // redirect for register and login pages
   const registerNavBtn = document.getElementById("register-button");
   const loginNavBtn = document.getElementById("login-button");
 
@@ -42,13 +42,13 @@ function saveUsers(users) {
 
 // registration handler
 function registerUser() {
-  const emailEl = document.getElementById("email");
-  const usernameEl = document.getElementById("username");
-  const passwordEl = document.getElementById("password");
+  const userEmail = document.getElementById("email");
+  const userUsername = document.getElementById("username");
+  const userPassword = document.getElementById("password");
 
-  const email = emailEl ? emailEl.value.trim() : "";
-  const username = usernameEl ? usernameEl.value.trim() : "";
-  const password = passwordEl ? passwordEl.value.trim() : "";
+  const email = userEmail ? userEmail.value.trim() : "";
+  const username = userUsername ? userUsername.value.trim() : "";
+  const password = userPassword ? userPassword.value.trim() : "";
 
   if (!email || !username || !password) {
     alert("looks like you didn't fill in all the blanks. try again!");
