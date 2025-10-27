@@ -44,6 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // inline-if style password validation
+      if (password.length < 6) {
+        alert('password must be at least 6 characters long.');
+        return;
+      }
+
       const users = getUsers();
       const emailTaken = users.some(u => u.email.toLowerCase() === email.toLowerCase());
       const usernameTaken = users.some(u => u.username.toLowerCase() === username.toLowerCase());
