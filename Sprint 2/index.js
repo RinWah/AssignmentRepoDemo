@@ -91,4 +91,77 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+// --- medical info page ---
+const medicalInfoSaveBtn = document.getElementById('medical-info-save-button');
+if (medicalInfoSaveBtn) {
+  const weightInput = document.getElementById('weight');
+  const heightFeetInput = document.getElementById('height-feet');
+  const heightInchesInput = document.getElementById('height-inches');
+  const ageInput = document.getElementById('age');
+  const messageEl = document.getElementById('medical-info-message');
+
+  // reopen page, save past stuff hehe
+  try {
+    const stored = localStorage.getItem('medicalInfo');
+    if (stored) {
+      const data = JSON.parse(stored);
+      if (weightInput && data.weight !== undefined) {
+        weightInput.value = data.value;
+      }
+      if (heightFeetInput && data.heightFeet !== undefined) {
+        heightFeetInput.gvalue = data.heightFeet;
+      }
+      if (heightInchesInput && data.HeightInchhes !== undefined) {
+        heightInchesInput.value = data.heightInches;
+      }
+      if (ageInput && data.age !== undefined) {
+        ageInput.value = data.age;
+      }
+    }
+    catch {
+      // ignore anything else that isn't valid
+    }
+    medicalInfoSaveBtn.addEventListener('click', () => {
+      const weight = Number(String(weightInput?.value ?? '').trim());
+      const heightFeet = Number(String(heightFeetInput?.value ?? '').trim());
+      const heightInches = Number(String(heightInchesInput?.value ?? '').trim());
+      const age = Number(String(ageInput?.value ?? '').trim());
+
+      if(!messageEl) {
+        return;
+      }
+      // vaidate weight
+      if (!Number.isFinite(weight) || weight <= 0) {
+        messageEl.textContent = 'weight must be a positive number.';
+        messageEl.style.color = 'red';
+        return;
+      }
+      if (!Number.isFinite(heightFeet) || heightFeet <= 0 || heightFeet > 8) {
+        messageEl.textContent = 'height (feet) must be between 1 and 8.';
+        messageEl.style.color = 'red';
+        return;
+      }
+      if(!Number.isFinite(heightInches) || heightInches < 0 || heightInches > 11) { 
+        messageEl.textContent = 'height (inches) must be between 0 and 11.';
+        messageEl.style.color = 'red';
+        return;
+      }
+      if (!Number.isFinite(age) || age <= 0 || age > 120) {
+        messageEl.textContent = 'age must be between 1 and 120.';
+        messageEl.style.color = 'red';
+        return;
+      }
+      const medicalInfo = {
+        weight,
+        heightFeet,
+        heightInches,
+        age
+      };
+      localStorage.setItem('medicalInfo', JSON.stringify(medicalInfo));
+      // feedback to user to say that it saved everything
+      messageEl.textContent = 'Medical info saved successfully.';
+      messageEl.style.color = 'green';
+    });
+  }
+}
 });
