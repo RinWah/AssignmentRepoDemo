@@ -22,4 +22,40 @@
                 />
             </div>
             <div>
+                <label for="height-feet">Height:</label>
+                <input
+                    type="number"
+                    id="height-feet"
+                    name="height-feet"
+                    min="1"
+                    max="8"
+                    required
+                />
+                <span>ft</span>
+                <input 
+                    type="number"
+                    id="height-inches"
+                    name="height-inches"
+                    min="0"
+                    max="11"
+                    required
+                />
+                <span>in</span>
+            </div>
+            <div>
+                <label for="age">Age (years):</label>
+                <input
+                    type="number"
+                    id="age"
+                    name="age"
+                    min="0"
+                    max="120"
+                    required
+                />
+            </div>
+            <button type="button" id="medical-info-save-button">Save</button>
+        </form>
+        <p id="medical-info-message"></p>
+        <script src="index.js" defer></script>
     </body>
+</html>
