@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginNavBtn) {
     loginNavBtn.addEventListener('click', () => (window.location.href = 'login.html'));
   }
+  const medicalInfoNavBtn = document.getElementById('medical-info-button');
+  if (medicalInfoNavBtn) {
+    medicalInfoNavBtn.addEventListener('click', () => (window.location.href = 'medical-info.html'));
+  }
 
   // --- register page ---
   const registerBtn = document.getElementById('register-account-button');
