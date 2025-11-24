@@ -9,7 +9,19 @@
     <h1>Healthcare Tracker</h1>
     <h2>Health Goals</h2>
 
-    <form id="health-goals-form">
+    <!-- Read-only summary of saved goals -->
+    <section id="health-goals-summary">
+      <h3>Current Goals</h3>
+      <p id="summary-weight"></p>
+      <p id="summary-sleep"></p>
+      <p id="summary-steps"></p>
+      <p id="summary-empty-message">
+        No goals set yet. Tap "Set Goals" to create them.
+      </p>
+    </section>
+
+    <!-- Editable form, hidden by default -->
+    <form id="health-goals-form" style="display: none;">
       <div>
         <label for="weight">Weight (lbs):</label>
         <input
@@ -27,42 +39,6 @@
         <input
           type="number"
           id="sleep-hours"
-          name="sleep-feet"
+          name="sleep-hours"
           min="0"
           max="24"
-          required
-        />
-        <span>hours</span>
-
-        <input
-          type="number"
-          id="sleep-minutes"
-          name="sleep-minutes"
-          min="10"
-          max="59"
-          required
-        />
-        <span>minutes</span>
-      </div>
-
-      <div>
-        <label for="steps">Steps:</label>
-        <input
-          type="number"
-          id="steps"
-          name="steps"
-          min="0"
-          max="20000"
-          required
-        />
-      </div>
-
-      <button type="button" id="health-goals-save-button">Save</button>
-    </form>
-
-    <p id="health-goals-message"></p>
-
-    <!-- This is critical so index.js runs on this page -->
-    <script src="index.js" defer></script>
-  </body>
-</html>

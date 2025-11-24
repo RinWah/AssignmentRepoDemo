@@ -175,4 +175,141 @@ document.addEventListener('DOMContentLoaded', () => {
       messageEl.style.color = 'green';
     });
   }
+
+  // === Health Goals Use Case Implementation ===
+
+document.addEventListener("DOMContentLoaded", () => {
+  const goalsForm = document.getElementById("health-goals-form");
+  const saveButton = document.getElementById("health-goals-save-button");
+  const toggleButton = document.getElementById("toggle-goals-form-button");
+  const messageEl = document.getElementById("health-goals-message");
+
+  const summaryWeight = document.getElementById("summary-weight");
+  const summarySleep = document.getElementById("summary-sleep");
+  const summarySteps = document.getElementById("summary-steps");
+  const summaryEmpty = document.getElementById("summary-empty-message");
+
+  // If these elements are not on the page, do nothing (we're not on health-goals.html)
+  if (!goalsForm || !saveButton || !toggleButton) {
+    return;
+  }
+
+  // Helpers
+  function showForm() {
+    goalsForm.style.display = "block";
+    messageEl.textContent = "";
+  }
+
+  function hideForm() {
+    goalsForm.style.display = "none";
+  }
+
+  function updateSummaryView(goals) {
+    if (!goals) {
+      summaryWeight.textContent = "";
+      summarySleep.textContent = "";
+      summarySteps.textContent = "";
+      summaryEmpty.style.display = "block";
+      return;
+    }
+
+    summaryWeight.textContent = `Weight goal: ${goals.weight.toFixed(1)} lbs`;
+    summarySleep.textContent = `Sleep goal: ${goals.sleepHours} hr ${goals.sleepMinutes} min`;
+    summarySteps.textContent = `Step goal: ${goals.steps} steps`;
+
+    summaryEmpty.style.display = "none";
+  }
+
+  function loadGoalsFromStorage() {
+    const stored = localStorage.getItem("healthGoals");
+    if (!stored) {
+      updateSummaryView(null);
+      toggleButton.textContent = "Set Goals";
+      return;
+    }
+
+    try {
+      const goals = JSON.parse(stored);
+      updateSummaryView(goals);
+      toggleButton.textContent = "Change Goals";
+    } catch (e) {
+      // If something is wrong with storage, just reset it
+      localStorage.removeItem("healthGoals");
+      updateSummaryView(null);
+      toggleButton.textContent = "Set Goals";
+    }
+  }
+
+  // On page load, populate the summary from localStorage
+  loadGoalsFromStorage();
+
+  // When user taps "Set Goals" / "Change Goals"
+  toggleButton.addEventListener("click", () => {
+    // Load existing values into the form, if any
+    const stored = localStorage.getItem("healthGoals");
+    if (stored) {
+      try {
+        const goals = JSON.parse(stored);
+        document.getElementById("weight").value = goals.weight;
+        document.getElementById("sleep-hours").value = goals.sleepHours;
+        document.getElementById("sleep-minutes").value = goals.sleepMinutes;
+        document.getElementById("steps").value = goals.steps;
+      } catch (e) {
+        // ignore and leave form blank
+      }
+    }
+    showForm();
+  });
+
+  // When user taps "Save"
+  saveButton.addEventListener("click", () => {
+    const weight = parseFloat(document.getElementById("weight").value);
+    const sleepHours = parseInt(
+      document.getElementById("sleep-hours").value,
+      10
+    );
+    const sleepMinutes = parseInt(
+      document.getElementById("sleep-minutes").value,
+      10
+    );
+    const steps = parseInt(document.getElementById("steps").value, 10);
+
+    // Basic validation matching your business rules:
+    // BR01: weight must be > 0
+    if (!Number.isFinite(weight) || weight <= 0) {
+      messageEl.textContent = "Impossible weight (must be greater than 0).";
+      return;
+    }
+
+    // BR02: sleep > 0 hr 0 min
+    if (
+      !Number.isFinite(sleepHours) ||
+      !Number.isFinite(sleepMinutes) ||
+      (sleepHours === 0 && sleepMinutes === 0)
+    ) {
+      messageEl.textContent =
+        "Sleep must be greater than 0 hours 0 minutes.";
+      return;
+    }
+
+    if (!Number.isFinite(steps) || steps < 0) {
+      messageEl.textContent = "Steps must be 0 or more.";
+      return;
+    }
+
+    const goals = { weight, sleepHours, sleepMinutes, steps };
+
+    // Save to localStorage (acts as our local “database”)
+    localStorage.setItem("healthGoals", JSON.stringify(goals));
+
+    // Update UI to read-only summary
+    updateSummaryView(goals);
+    hideForm();
+    toggleButton.textContent = "Change Goals";
+
+    // Show confirmation message
+    messageEl.textContent = "Goals updated.";
+  });
+});
+
 });
