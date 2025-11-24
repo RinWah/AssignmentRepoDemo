@@ -1,6 +1,5 @@
 // index.js — feature-parity with inline if checks
 document.addEventListener('DOMContentLoaded', () => {
-
   // --- helpers ---
   const getUsers = () => {
     try {
@@ -18,17 +17,30 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- nav on homepage ---
   const registerNavBtn = document.getElementById('register-button');
   if (registerNavBtn) {
-    registerNavBtn.addEventListener('click', () => (window.location.href = 'register.html'));
+    registerNavBtn.addEventListener('click', () => {
+      window.location.href = 'register.html';
+    });
   }
 
   const loginNavBtn = document.getElementById('login-button');
   if (loginNavBtn) {
-    loginNavBtn.addEventListener('click', () => (window.location.href = 'login.html'));
+    loginNavBtn.addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
   }
 
   const medicalInfoNavBtn = document.getElementById('medical-info-button');
   if (medicalInfoNavBtn) {
-    medicalInfoNavBtn.addEventListener('click', () => (window.location.href = 'medical-info.html'));
+    medicalInfoNavBtn.addEventListener('click', () => {
+      window.location.href = 'medical-info.html';
+    });
+  }
+
+  const healthGoalsNavBtn = document.getElementById('health-goals-button');
+  if (healthGoalsNavBtn) {
+    healthGoalsNavBtn.addEventListener('click', () => {
+      window.location.href = 'health-goals.html';
+    });
   }
 
   // --- register page ---
@@ -57,10 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const users = getUsers();
-      const emailTaken = users.some(u => u.email.toLowerCase() === email.toLowerCase());
-      const usernameTaken = users.some(u => u.username.toLowerCase() === username.toLowerCase());
-      if (emailTaken) { alert('that email is already registered.'); return; }
-      if (usernameTaken) { alert('that username is already taken.'); return; }
+      const emailTaken = users.some((u) => u.email.toLowerCase() === email.toLowerCase());
+      const usernameTaken = users.some((u) => u.username.toLowerCase() === username.toLowerCase());
+      if (emailTaken) {
+        alert('that email is already registered.');
+        return;
+      }
+      if (usernameTaken) {
+        alert('that username is already taken.');
+        return;
+      }
 
       users.push({ email, username, password });
       saveUsers(users);
@@ -82,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const users = getUsers();
-      const user = users.find(u => u.username === username && u.password === password);
+      const user = users.find((u) => u.username === username && u.password === password);
 
       if (user) {
         localStorage.setItem('loggedInUser', user.username);
@@ -176,140 +194,132 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // === Health Goals Use Case Implementation ===
+  // --- health goals page ---
+  const goalsForm = document.getElementById('health-goals-form');
+  const goalsSaveButton = document.getElementById('health-goals-save-button');
+  const toggleGoalsButton = document.getElementById('toggle-goals-form-button');
+  const goalsMessageEl = document.getElementById('health-goals-message');
 
-document.addEventListener("DOMContentLoaded", () => {
-  const goalsForm = document.getElementById("health-goals-form");
-  const saveButton = document.getElementById("health-goals-save-button");
-  const toggleButton = document.getElementById("toggle-goals-form-button");
-  const messageEl = document.getElementById("health-goals-message");
+  const summaryWeight = document.getElementById('summary-weight');
+  const summarySleep = document.getElementById('summary-sleep');
+  const summarySteps = document.getElementById('summary-steps');
+  const summaryEmpty = document.getElementById('summary-empty-message');
 
-  const summaryWeight = document.getElementById("summary-weight");
-  const summarySleep = document.getElementById("summary-sleep");
-  const summarySteps = document.getElementById("summary-steps");
-  const summaryEmpty = document.getElementById("summary-empty-message");
+  // Only run this if we're on the health-goals page
+  if (goalsForm && goalsSaveButton && toggleGoalsButton) {
+    const showForm = () => {
+      goalsForm.style.display = 'block';
+      if (goalsMessageEl) goalsMessageEl.textContent = '';
+    };
 
-  // If these elements are not on the page, do nothing (we're not on health-goals.html)
-  if (!goalsForm || !saveButton || !toggleButton) {
-    return;
-  }
+    const hideForm = () => {
+      goalsForm.style.display = 'none';
+    };
 
-  // Helpers
-  function showForm() {
-    goalsForm.style.display = "block";
-    messageEl.textContent = "";
-  }
+    const updateSummaryView = (goals) => {
+      if (!summaryWeight || !summarySleep || !summarySteps || !summaryEmpty) return;
 
-  function hideForm() {
-    goalsForm.style.display = "none";
-  }
+      if (!goals) {
+        summaryWeight.textContent = '';
+        summarySleep.textContent = '';
+        summarySteps.textContent = '';
+        summaryEmpty.style.display = 'block';
+        return;
+      }
 
-  function updateSummaryView(goals) {
-    if (!goals) {
-      summaryWeight.textContent = "";
-      summarySleep.textContent = "";
-      summarySteps.textContent = "";
-      summaryEmpty.style.display = "block";
-      return;
-    }
+      summaryWeight.textContent = `Weight goal: ${goals.weight.toFixed(1)} lbs`;
+      summarySleep.textContent = `Sleep goal: ${goals.sleepHours} hr ${goals.sleepMinutes} min`;
+      summarySteps.textContent = `Step goal: ${goals.steps} steps`;
 
-    summaryWeight.textContent = `Weight goal: ${goals.weight.toFixed(1)} lbs`;
-    summarySleep.textContent = `Sleep goal: ${goals.sleepHours} hr ${goals.sleepMinutes} min`;
-    summarySteps.textContent = `Step goal: ${goals.steps} steps`;
+      summaryEmpty.style.display = 'none';
+    };
 
-    summaryEmpty.style.display = "none";
-  }
+    const loadGoalsFromStorage = () => {
+      const stored = localStorage.getItem('healthGoals');
+      if (!stored) {
+        updateSummaryView(null);
+        toggleGoalsButton.textContent = 'Set Goals';
+        return;
+      }
 
-  function loadGoalsFromStorage() {
-    const stored = localStorage.getItem("healthGoals");
-    if (!stored) {
-      updateSummaryView(null);
-      toggleButton.textContent = "Set Goals";
-      return;
-    }
-
-    try {
-      const goals = JSON.parse(stored);
-      updateSummaryView(goals);
-      toggleButton.textContent = "Change Goals";
-    } catch (e) {
-      // If something is wrong with storage, just reset it
-      localStorage.removeItem("healthGoals");
-      updateSummaryView(null);
-      toggleButton.textContent = "Set Goals";
-    }
-  }
-
-  // On page load, populate the summary from localStorage
-  loadGoalsFromStorage();
-
-  // When user taps "Set Goals" / "Change Goals"
-  toggleButton.addEventListener("click", () => {
-    // Load existing values into the form, if any
-    const stored = localStorage.getItem("healthGoals");
-    if (stored) {
       try {
         const goals = JSON.parse(stored);
-        document.getElementById("weight").value = goals.weight;
-        document.getElementById("sleep-hours").value = goals.sleepHours;
-        document.getElementById("sleep-minutes").value = goals.sleepMinutes;
-        document.getElementById("steps").value = goals.steps;
+        updateSummaryView(goals);
+        toggleGoalsButton.textContent = 'Change Goals';
       } catch (e) {
-        // ignore and leave form blank
+        localStorage.removeItem('healthGoals');
+        updateSummaryView(null);
+        toggleGoalsButton.textContent = 'Set Goals';
       }
-    }
-    showForm();
-  });
+    };
 
-  // When user taps "Save"
-  saveButton.addEventListener("click", () => {
-    const weight = parseFloat(document.getElementById("weight").value);
-    const sleepHours = parseInt(
-      document.getElementById("sleep-hours").value,
-      10
-    );
-    const sleepMinutes = parseInt(
-      document.getElementById("sleep-minutes").value,
-      10
-    );
-    const steps = parseInt(document.getElementById("steps").value, 10);
+    // On first load, show whatever is saved
+    loadGoalsFromStorage();
 
-    // Basic validation matching your business rules:
-    // BR01: weight must be > 0
-    if (!Number.isFinite(weight) || weight <= 0) {
-      messageEl.textContent = "Impossible weight (must be greater than 0).";
-      return;
-    }
+    // Open the form when user clicks Set/Change Goals
+    toggleGoalsButton.addEventListener('click', () => {
+      const stored = localStorage.getItem('healthGoals');
+      if (stored) {
+        try {
+          const goals = JSON.parse(stored);
+          const weightInput = document.getElementById('weight');
+          const sleepHoursInput = document.getElementById('sleep-hours');
+          const sleepMinutesInput = document.getElementById('sleep-minutes');
+          const stepsInput = document.getElementById('steps');
 
-    // BR02: sleep > 0 hr 0 min
-    if (
-      !Number.isFinite(sleepHours) ||
-      !Number.isFinite(sleepMinutes) ||
-      (sleepHours === 0 && sleepMinutes === 0)
-    ) {
-      messageEl.textContent =
-        "Sleep must be greater than 0 hours 0 minutes.";
-      return;
-    }
+          if (weightInput) weightInput.value = goals.weight;
+          if (sleepHoursInput) sleepHoursInput.value = goals.sleepHours;
+          if (sleepMinutesInput) sleepMinutesInput.value = goals.sleepMinutes;
+          if (stepsInput) stepsInput.value = goals.steps;
+        } catch (e) {
+          // ignore and leave the form blank
+        }
+      }
+      showForm();
+    });
 
-    if (!Number.isFinite(steps) || steps < 0) {
-      messageEl.textContent = "Steps must be 0 or more.";
-      return;
-    }
+    // Save button logic
+    goalsSaveButton.addEventListener('click', () => {
+      const weight = parseFloat(document.getElementById('weight')?.value ?? '');
+      const sleepHours = parseInt(document.getElementById('sleep-hours')?.value ?? '', 10);
+      const sleepMinutes = parseInt(document.getElementById('sleep-minutes')?.value ?? '', 10);
+      const steps = parseInt(document.getElementById('steps')?.value ?? '', 10);
 
-    const goals = { weight, sleepHours, sleepMinutes, steps };
+      if (!goalsMessageEl) return;
 
-    // Save to localStorage (acts as our local “database”)
-    localStorage.setItem("healthGoals", JSON.stringify(goals));
+      // BR01: weight > 0
+      if (!Number.isFinite(weight) || weight <= 0) {
+        goalsMessageEl.textContent = 'Impossible weight (must be greater than 0).';
+        return;
+      }
 
-    // Update UI to read-only summary
-    updateSummaryView(goals);
-    hideForm();
-    toggleButton.textContent = "Change Goals";
+      // BR02: sleep > 0 hr 0 min
+      if (
+        !Number.isFinite(sleepHours) ||
+        !Number.isFinite(sleepMinutes) ||
+        (sleepHours === 0 && sleepMinutes === 0)
+      ) {
+        goalsMessageEl.textContent = 'Sleep must be greater than 0 hours 0 minutes.';
+        return;
+      }
 
-    // Show confirmation message
-    messageEl.textContent = "Goals updated.";
-  });
-});
+      if (!Number.isFinite(steps) || steps < 0) {
+        goalsMessageEl.textContent = 'Steps must be 0 or more.';
+        return;
+      }
 
+      const goals = { weight, sleepHours, sleepMinutes, steps };
+
+      // Save to localStorage (acts as our local “database”)
+      localStorage.setItem('healthGoals', JSON.stringify(goals));
+
+      // Update UI to read-only summary
+      updateSummaryView(goals);
+      hideForm();
+      toggleGoalsButton.textContent = 'Change Goals';
+
+      // Show confirmation message
+      goalsMessageEl.textContent = 'Goals updated.';
+    });
+  }
 });
