@@ -224,7 +224,11 @@ function setupMedicalInfoPage() {
       },
     }));
 
-    messageP.textContent = "Medical information saved!";
+  messageP.textContent = "Medical information saved!";
+  setTimeout(() => {
+    window.location.href = "homepage.html";
+  }, 500);
+
   });
 
   // Press Enter to save medical info
@@ -325,6 +329,10 @@ function setupHealthGoalsPage() {
       messageP.textContent = "Health goals saved!";
       form.style.display = "none";
       toggleBtn.textContent = "Set Goals";
+
+      setTimeout(() => {
+        window.location.href = "homepage.html";
+      }, 500);
     });
   }
 

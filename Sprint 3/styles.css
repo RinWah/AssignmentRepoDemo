@@ -1,13 +1,129 @@
-#logout-button {
-  padding: 10px 20px;
-  background-color: #c62828;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size:16px;
+/* Global font & lowercase text everywhere */
+body {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: lowercase; /* makes everything lowercase automatically */
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #e0f2ff, #f5f7fb);
+  color: #1f2933;
 }
 
-#logout-button:hover {
-  background-color: #b71c1c;
+/* Make form controls lowercase as well */
+button, input, textarea, label, p, h1, h2, h3, h4, span {
+  text-transform: lowercase;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Headers bold */
+h1, h2, h3, h4 {
+  font-weight: 600;
+}
+
+/* Page wrapper for centered card */
+.page-wrapper {
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* Card container */
+.home-card {
+  max-width: 480px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px 24px;
+  margin: auto;
+  text-align: center;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.15);
+}
+
+/* subtitle */
+.subtitle {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+/* button groups */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 16px 0 20px;
+}
+
+/* Base button style */
+.btn {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: 
+    transform 0.08s ease,
+    box-shadow 0.08s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+/* 🌸 LOGOUT = pastel red */
+.btn-logout {
+  background-color: #f7b4b4; /* pastel red */
+  color: white;
+}
+
+.btn-logout:hover {
+  background-color: #f28c8c;
+}
+
+/* 💜 PRIMARY ACTIONS = purple */
+.btn-primary {
+  background-color: #6b4bff; /* purple */
+  color: white;
+  box-shadow: 0 10px 20px rgba(107, 75, 255, 0.35);
+}
+
+.btn-primary:hover {
+  background-color: #5a39f0;
+  box-shadow: 0 14px 30px rgba(107, 75, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+/* 💜 Outline purple for Login */
+.btn-outline {
+  background-color: white;
+  color: #6b4bff;
+  border: 2px solid #6b4bff;
+}
+
+.btn-outline:hover {
+  background-color: #f4eaff; /* very light purple */
+}
+
+/* light grey buttons */
+.btn-secondary {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e7eb;
+}
+
+/* generic hover animation */
+.btn:hover {
+  transform: translateY(-1px);
 }
