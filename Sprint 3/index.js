@@ -1,325 +1,333 @@
-// index.js — feature-parity with inline if checks
-document.addEventListener('DOMContentLoaded', () => {
-  // --- helpers ---
-  const getUsers = () => {
-    try {
-      const raw = localStorage.getItem('users');
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
+// index.js
+
+// ---------- Helpers for localStorage ----------
+function loadUsers() {
+  const raw = localStorage.getItem("users");
+  return raw ? JSON.parse(raw) : {};
+}
+
+function saveUsers(users) {
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+function getCurrentUserName() {
+  return localStorage.getItem("currentUser");
+}
+
+function setCurrentUserName(username) {
+  localStorage.setItem("currentUser", username);
+}
+
+function getCurrentUser() {
+  const username = getCurrentUserName();
+  if (!username) return null;
+
+  const users = loadUsers();
+  return users[username] ?? null;
+}
+
+function updateCurrentUser(updater) {
+  const username = getCurrentUserName();
+  if (!username) return;
+
+  const users = loadUsers();
+  if (!users[username]) return;
+
+  users[username] = updater(users[username]);
+  saveUsers(users);
+}
+
+// ---------- Global helper: press Enter to click a button ----------
+function enableEnterKeySubmit(buttonId) {
+  const btn = document.getElementById(buttonId);
+  if (!btn) return;
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // stop default form submit / page reload
+      btn.click();        // behave like clicking the main button
     }
-  };
+  });
+}
 
-  const saveUsers = (users) => {
-    localStorage.setItem('users', JSON.stringify(users));
-  };
+// ---------- PAGE DETECTION ----------
+document.addEventListener("DOMContentLoaded", () => {
+  setupHomepage();
+  setupRegisterPage();
+  setupLoginPage();
+  setupMedicalInfoPage();
+  setupHealthGoalsPage();
+});
 
-  // --- nav on homepage ---
-  const registerNavBtn = document.getElementById('register-button');
-  if (registerNavBtn) {
-    registerNavBtn.addEventListener('click', () => {
-      window.location.href = 'register.html';
-    });
-  }
+// ---------- HOMEPAGE ----------
+function setupHomepage() {
+  const registerBtn = document.getElementById("register-button");
+  const loginBtn = document.getElementById("login-button");
+  const medicalInfoBtn = document.getElementById("medical-info-button");
+  const healthGoalsBtn = document.getElementById("health-goals-button");
+  const logoutBtn = document.getElementById("logout-button");
 
-  const loginNavBtn = document.getElementById('login-button');
-  if (loginNavBtn) {
-    loginNavBtn.addEventListener('click', () => {
-      window.location.href = 'login.html';
-    });
-  }
-
-  const medicalInfoNavBtn = document.getElementById('medical-info-button');
-  if (medicalInfoNavBtn) {
-    medicalInfoNavBtn.addEventListener('click', () => {
-      window.location.href = 'medical-info.html';
-    });
-  }
-
-  const healthGoalsNavBtn = document.getElementById('health-goals-button');
-  if (healthGoalsNavBtn) {
-    healthGoalsNavBtn.addEventListener('click', () => {
-      window.location.href = 'health-goals.html';
-    });
-  }
-
-  // --- register page ---
-  const registerBtn = document.getElementById('register-account-button');
   if (registerBtn) {
-    registerBtn.addEventListener('click', () => {
-      const email = String(document.getElementById('email')?.value ?? '').trim();
-      const username = String(document.getElementById('username')?.value ?? '').trim();
-      const password = String(document.getElementById('password')?.value ?? '');
-
-      if (!email || !username || !password) {
-        alert('please fill out email, username, and password.');
-        return;
-      }
-
-      // inline-if style email validation
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert('please enter a valid email.');
-        return;
-      }
-
-      // inline-if style password validation
-      if (password.length < 6) {
-        alert('password must be at least 6 characters long.');
-        return;
-      }
-
-      const users = getUsers();
-      const emailTaken = users.some((u) => u.email.toLowerCase() === email.toLowerCase());
-      const usernameTaken = users.some((u) => u.username.toLowerCase() === username.toLowerCase());
-      if (emailTaken) {
-        alert('that email is already registered.');
-        return;
-      }
-      if (usernameTaken) {
-        alert('that username is already taken.');
-        return;
-      }
-
-      users.push({ email, username, password });
-      saveUsers(users);
-      alert('account created! redirecting to login…');
-      window.location.href = 'login.html';
+    registerBtn.addEventListener("click", () => {
+      window.location.href = "register.html";
     });
   }
 
-  // --- login page ---
-  const loginBtn = document.getElementById('login-account-button');
   if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
-      const username = String(document.getElementById('login-username')?.value ?? '').trim();
-      const password = String(document.getElementById('login-password')?.value ?? '');
-
-      if (!username || !password) {
-        alert('make sure you fill both username and password!');
-        return;
-      }
-
-      const users = getUsers();
-      const user = users.find((u) => u.username === username && u.password === password);
-
-      if (user) {
-        localStorage.setItem('loggedInUser', user.username);
-        alert(`welcome, ${user.username}!`);
-        window.location.href = 'homepage.html';
-      } else {
-        alert('invalid username/password.');
-      }
+    loginBtn.addEventListener("click", () => {
+      window.location.href = "login.html";
     });
   }
 
-  // --- medical info page ---
-  const medicalInfoSaveBtn = document.getElementById('medical-info-save-button');
-  if (medicalInfoSaveBtn) {
-    const weightInput = document.getElementById('weight');
-    const heightFeetInput = document.getElementById('height-feet');
-    const heightInchesInput = document.getElementById('height-inches');
-    const ageInput = document.getElementById('age');
-    const messageEl = document.getElementById('medical-info-message');
+  if (medicalInfoBtn) {
+    medicalInfoBtn.addEventListener("click", () => {
+      window.location.href = "medical-info.html";
+    });
+  }
 
-    // reopen page, load past values if any
-    try {
-      const stored = localStorage.getItem('medicalInfo');
-      if (stored) {
-        const data = JSON.parse(stored);
-        if (weightInput && data.weight !== undefined) {
-          weightInput.value = data.weight;
-        }
-        if (heightFeetInput && data.heightFeet !== undefined) {
-          heightFeetInput.value = data.heightFeet;
-        }
-        if (heightInchesInput && data.heightInches !== undefined) {
-          heightInchesInput.value = data.heightInches;
-        }
-        if (ageInput && data.age !== undefined) {
-          ageInput.value = data.age;
-        }
-      }
-    } catch (e) {
-      // ignore anything else that isn't valid
-      console.error('error loading medical info', e);
+  if (healthGoalsBtn) {
+    healthGoalsBtn.addEventListener("click", () => {
+      window.location.href = "health-goals.html";
+    });
+  }
+
+  // Logout button (only exists on pages where you added it)
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("currentUser");
+      alert("You have been logged out.");
+      window.location.href = "login.html";
+    });
+  }
+}
+
+// ---------- REGISTER PAGE ----------
+function setupRegisterPage() {
+  const registerBtn = document.getElementById("register-account-button");
+  if (!registerBtn) return; // not on this page
+
+  const emailInput = document.getElementById("email");
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+
+  registerBtn.addEventListener("click", () => {
+    const email = emailInput.value.trim();
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !username || !password) {
+      alert("Please fill in all fields.");
+      return;
     }
 
-    medicalInfoSaveBtn.addEventListener('click', () => {
-      const weight = Number(String(weightInput?.value ?? '').trim());
-      const heightFeet = Number(String(heightFeetInput?.value ?? '').trim());
-      const heightInches = Number(String(heightInchesInput?.value ?? '').trim());
-      const age = Number(String(ageInput?.value ?? '').trim());
+    const users = loadUsers();
+    if (users[username]) {
+      alert("That username is already taken.");
+      return;
+    }
 
-      if (!messageEl) {
-        return;
-      }
+    users[username] = {
+      email,
+      password, // note: plain text, only OK for a simple school project
+      medicalInfo: null,
+      healthGoals: null,
+    };
 
-      // validate weight / height / age
-      if (!Number.isFinite(weight) || weight <= 0) {
-        messageEl.textContent = 'weight must be a positive number.';
-        messageEl.style.color = 'red';
-        return;
-      }
+    saveUsers(users);
+    setCurrentUserName(username);
+    alert("Account created and logged in!");
+    window.location.href = "homepage.html";
+  });
 
-      if (!Number.isFinite(heightFeet) || heightFeet <= 0 || heightFeet > 8) {
-        messageEl.textContent = 'height (feet) must be between 1 and 8.';
-        messageEl.style.color = 'red';
-        return;
-      }
+  // Press Enter to submit register form
+  enableEnterKeySubmit("register-account-button");
+}
 
-      if (!Number.isFinite(heightInches) || heightInches < 0 || heightInches > 11) {
-        messageEl.textContent = 'height (inches) must be between 0 and 11.';
-        messageEl.style.color = 'red';
-        return;
-      }
+// ---------- LOGIN PAGE ----------
+function setupLoginPage() {
+  const loginBtn = document.getElementById("login-account-button");
+  if (!loginBtn) return; // not on this page
 
-      if (!Number.isFinite(age) || age <= 0 || age > 120) {
-        messageEl.textContent = 'age must be between 1 and 120.';
-        messageEl.style.color = 'red';
-        return;
-      }
+  const usernameInput = document.getElementById("login-username");
+  const passwordInput = document.getElementById("login-password");
 
-      const medicalInfo = {
+  loginBtn.addEventListener("click", () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    const users = loadUsers();
+    const user = users[username];
+
+    if (!user || user.password !== password) {
+      alert("Invalid username or password.");
+      return;
+    }
+
+    setCurrentUserName(username);
+    alert("Logged in as " + username);
+    window.location.href = "homepage.html";
+  });
+
+  // Press Enter to submit login form
+  enableEnterKeySubmit("login-account-button");
+}
+
+// ---------- MEDICAL INFO PAGE ----------
+function setupMedicalInfoPage() {
+  const saveBtn = document.getElementById("medical-info-save-button");
+  if (!saveBtn) return; // not on this page
+
+  const weightInput = document.getElementById("weight");
+  const heightFeetInput = document.getElementById("height-feet");
+  const heightInchesInput = document.getElementById("height-inches");
+  const ageInput = document.getElementById("age");
+  const messageP = document.getElementById("medical-info-message");
+
+  const currentUser = getCurrentUser();
+  if (!currentUser) {
+    messageP.textContent = "You must be logged in to view this page.";
+    return;
+  }
+
+  // Pre-fill if data exists
+  if (currentUser.medicalInfo) {
+    const info = currentUser.medicalInfo;
+    weightInput.value = info.weight ?? "";
+    heightFeetInput.value = info.heightFeet ?? "";
+    heightInchesInput.value = info.heightInches ?? "";
+    ageInput.value = info.age ?? "";
+  }
+
+  saveBtn.addEventListener("click", () => {
+    const weight = parseFloat(weightInput.value);
+    const heightFeet = parseInt(heightFeetInput.value, 10);
+    const heightInches = parseInt(heightInchesInput.value, 10);
+    const age = parseInt(ageInput.value, 10);
+
+    if (
+      isNaN(weight) ||
+      isNaN(heightFeet) ||
+      isNaN(heightInches) ||
+      isNaN(age)
+    ) {
+      messageP.textContent = "Please fill in all fields correctly.";
+      return;
+    }
+
+    updateCurrentUser((user) => ({
+      ...user,
+      medicalInfo: {
         weight,
         heightFeet,
         heightInches,
-        age
-      };
+        age,
+      },
+    }));
 
-      localStorage.setItem('medicalInfo', JSON.stringify(medicalInfo));
+    messageP.textContent = "Medical information saved!";
+  });
 
-      // feedback to user to say that it saved everything
-      messageEl.textContent = 'medical information saved successfully.';
-      messageEl.style.color = 'green';
-    });
+  // Press Enter to save medical info
+  enableEnterKeySubmit("medical-info-save-button");
+}
+
+// ---------- HEALTH GOALS PAGE ----------
+function setupHealthGoalsPage() {
+  const saveBtn = document.getElementById("health-goals-save-button");
+  const toggleBtn = document.getElementById("toggle-goals-form-button");
+  if (!toggleBtn) return; // not on this page
+
+  const form = document.getElementById("health-goals-form");
+  const summaryWeight = document.getElementById("summary-weight");
+  const summarySleep = document.getElementById("summary-sleep");
+  const summarySteps = document.getElementById("summary-steps");
+  const summaryEmpty = document.getElementById("summary-empty-message");
+  const messageP = document.getElementById("health-goals-message");
+
+  const weightInput = document.getElementById("weight");
+  const sleepHoursInput = document.getElementById("sleep-hours");
+  const sleepMinutesInput = document.getElementById("sleep-minutes");
+  const stepsInput = document.getElementById("steps");
+
+  const currentUser = getCurrentUser();
+  if (!currentUser) {
+    if (messageP) {
+      messageP.textContent = "You must be logged in to view this page.";
+    }
+    if (form) form.style.display = "none";
+    return;
   }
 
-  // --- health goals page ---
-  const goalsForm = document.getElementById('health-goals-form');
-  const goalsSaveButton = document.getElementById('health-goals-save-button');
-  const toggleGoalsButton = document.getElementById('toggle-goals-form-button');
-  const goalsMessageEl = document.getElementById('health-goals-message');
+  function updateSummaryFromUser(user) {
+    if (!user || !user.healthGoals) {
+      summaryWeight.textContent = "";
+      summarySleep.textContent = "";
+      summarySteps.textContent = "";
+      summaryEmpty.style.display = "block";
+      return;
+    }
 
-  const summaryWeight = document.getElementById('summary-weight');
-  const summarySleep = document.getElementById('summary-sleep');
-  const summarySteps = document.getElementById('summary-steps');
-  const summaryEmpty = document.getElementById('summary-empty-message');
+    const g = user.healthGoals;
+    summaryWeight.textContent = `Weight goal: ${g.weight} lbs`;
+    summarySleep.textContent = `Sleep goal: ${g.sleepHours} hours ${g.sleepMinutes} minutes`;
+    summarySteps.textContent = `Steps goal: ${g.steps} steps`;
+    summaryEmpty.style.display = "none";
+  }
 
-  // Only run this if we're on the health-goals page
-  if (goalsForm && goalsSaveButton && toggleGoalsButton) {
-    const showForm = () => {
-      goalsForm.style.display = 'block';
-      if (goalsMessageEl) goalsMessageEl.textContent = '';
-    };
+  // Pre-fill if goals exist
+  if (currentUser.healthGoals) {
+    const g = currentUser.healthGoals;
+    weightInput.value = g.weight ?? "";
+    sleepHoursInput.value = g.sleepHours ?? "";
+    sleepMinutesInput.value = g.sleepMinutes ?? "";
+    stepsInput.value = g.steps ?? "";
+  }
 
-    const hideForm = () => {
-      goalsForm.style.display = 'none';
-    };
+  updateSummaryFromUser(currentUser);
 
-    const updateSummaryView = (goals) => {
-      if (!summaryWeight || !summarySleep || !summarySteps || !summaryEmpty) return;
+  toggleBtn.addEventListener("click", () => {
+    if (!form) return;
+    const isHidden =
+      form.style.display === "none" || form.style.display === "";
+    form.style.display = isHidden ? "block" : "none";
+    toggleBtn.textContent = isHidden ? "Hide Goals Form" : "Set Goals";
+  });
 
-      if (!goals) {
-        summaryWeight.textContent = '';
-        summarySleep.textContent = '';
-        summarySteps.textContent = '';
-        summaryEmpty.style.display = 'block';
-        return;
-      }
+  if (saveBtn) {
+    saveBtn.addEventListener("click", () => {
+      const weight = parseFloat(weightInput.value);
+      const sleepHours = parseInt(sleepHoursInput.value, 10);
+      const sleepMinutes = parseInt(sleepMinutesInput.value, 10);
+      const steps = parseInt(stepsInput.value, 10);
 
-      summaryWeight.textContent = `Weight goal: ${goals.weight.toFixed(1)} lbs`;
-      summarySleep.textContent = `Sleep goal: ${goals.sleepHours} hr ${goals.sleepMinutes} min`;
-      summarySteps.textContent = `Step goal: ${goals.steps} steps`;
-
-      summaryEmpty.style.display = 'none';
-    };
-
-    const loadGoalsFromStorage = () => {
-      const stored = localStorage.getItem('healthGoals');
-      if (!stored) {
-        updateSummaryView(null);
-        toggleGoalsButton.textContent = 'Set Goals';
-        return;
-      }
-
-      try {
-        const goals = JSON.parse(stored);
-        updateSummaryView(goals);
-        toggleGoalsButton.textContent = 'Change Goals';
-      } catch (e) {
-        localStorage.removeItem('healthGoals');
-        updateSummaryView(null);
-        toggleGoalsButton.textContent = 'Set Goals';
-      }
-    };
-
-    // On first load, show whatever is saved
-    loadGoalsFromStorage();
-
-    // Open the form when user clicks Set/Change Goals
-    toggleGoalsButton.addEventListener('click', () => {
-      const stored = localStorage.getItem('healthGoals');
-      if (stored) {
-        try {
-          const goals = JSON.parse(stored);
-          const weightInput = document.getElementById('weight');
-          const sleepHoursInput = document.getElementById('sleep-hours');
-          const sleepMinutesInput = document.getElementById('sleep-minutes');
-          const stepsInput = document.getElementById('steps');
-
-          if (weightInput) weightInput.value = goals.weight;
-          if (sleepHoursInput) sleepHoursInput.value = goals.sleepHours;
-          if (sleepMinutesInput) sleepMinutesInput.value = goals.sleepMinutes;
-          if (stepsInput) stepsInput.value = goals.steps;
-        } catch (e) {
-          // ignore and leave the form blank
-        }
-      }
-      showForm();
-    });
-
-    // Save button logic
-    goalsSaveButton.addEventListener('click', () => {
-      const weight = parseFloat(document.getElementById('weight')?.value ?? '');
-      const sleepHours = parseInt(document.getElementById('sleep-hours')?.value ?? '', 10);
-      const sleepMinutes = parseInt(document.getElementById('sleep-minutes')?.value ?? '', 10);
-      const steps = parseInt(document.getElementById('steps')?.value ?? '', 10);
-
-      if (!goalsMessageEl) return;
-
-      // BR01: weight > 0
-      if (!Number.isFinite(weight) || weight <= 0) {
-        goalsMessageEl.textContent = 'Impossible weight (must be greater than 0).';
-        return;
-      }
-
-      // BR02: sleep > 0 hr 0 min
       if (
-        !Number.isFinite(sleepHours) ||
-        !Number.isFinite(sleepMinutes) ||
-        (sleepHours === 0 && sleepMinutes === 0)
+        isNaN(weight) ||
+        isNaN(sleepHours) ||
+        isNaN(sleepMinutes) ||
+        isNaN(steps)
       ) {
-        goalsMessageEl.textContent = 'Sleep must be greater than 0 hours 0 minutes.';
+        messageP.textContent = "Please fill in all fields correctly.";
         return;
       }
 
-      if (!Number.isFinite(steps) || steps < 0) {
-        goalsMessageEl.textContent = 'Steps must be 0 or more.';
-        return;
-      }
+      updateCurrentUser((user) => ({
+        ...user,
+        healthGoals: {
+          weight,
+          sleepHours,
+          sleepMinutes,
+          steps,
+        },
+      }));
 
-      const goals = { weight, sleepHours, sleepMinutes, steps };
-
-      // Save to localStorage (acts as our local “database”)
-      localStorage.setItem('healthGoals', JSON.stringify(goals));
-
-      // Update UI to read-only summary
-      updateSummaryView(goals);
-      hideForm();
-      toggleGoalsButton.textContent = 'Change Goals';
-
-      // Show confirmation message
-      goalsMessageEl.textContent = 'Goals updated.';
+      const updatedUser = getCurrentUser();
+      updateSummaryFromUser(updatedUser);
+      messageP.textContent = "Health goals saved!";
+      form.style.display = "none";
+      toggleBtn.textContent = "Set Goals";
     });
   }
-});
+
+  // Press Enter to save health goals
+  enableEnterKeySubmit("health-goals-save-button");
+}
