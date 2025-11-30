@@ -1,26 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="data:,">
-        <title>Login | Healthcare Tracker</title>
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <h1>Healthcare Tracker</h1>
-        <h2>Login</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:,">
+    <title>login | healthcare tracker</title>
 
-        <label for="username">Username:</label>
-        <input type="text" id="login-username" name="username" />
-        
-        <label for="password">Password:</label>
-        <input type="password" id="login-password" name="password" />
+    <!-- montserrat font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    >
 
-        <button type="button" id="login-account-button">Login</button>
+    <!-- icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
-        <script src="index.js" defer></script>
-    </body>
+    <!-- global styles -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <main class="home-card">
+        <h1>
+          <i class="ri-sparkling-line"></i>
+          healthcare tracker
+        </h1>
+        <h2>
+          <i class="ri-login-circle-line"></i>
+          log in
+        </h2>
+
+        <form class="form-group">
+          <label for="login-username">username</label>
+          <input type="text" id="login-username" name="username">
+
+          <label for="login-password">password</label>
+          <input type="password" id="login-password" name="password">
+
+          <button
+            type="button"
+            id="login-account-button"
+            class="btn btn-primary"
+          >
+            <i class="ri-login-circle-line"></i>
+            log in
+          </button>
+        </form>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          style="margin-top: 12px;"
+          onclick="window.location.href='homepage.html'"
+        >
+          <i class="ri-arrow-left-line"></i>
+          back
+        </button>
+      </main>
+    </div>
+
+    <script src="index.js" defer></script>
+  </body>
 </html>

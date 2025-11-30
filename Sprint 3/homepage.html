@@ -5,49 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="data:,">
-    <title>Healthcare Tracker</title>
+    <title>healthcare tracker</title>
 
-    <!-- Montserrat font -->
+    <!-- montserrat font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     >
 
-    <!-- Your global styles -->
+    <!-- cute, minimal asian-style icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- your global styles -->
     <link rel="stylesheet" href="styles.css">
   </head>
+
   <body>
     <div class="page-wrapper">
       <main class="home-card">
-        <h1>Healthcare Tracker</h1>
+        
+        <h1>
+          <i class="ri-sparkling-line"></i>
+          healthcare tracker
+        </h1>
+
         <p class="subtitle">
-          Keep your medical info and health goals in one easy place.
+          keep your medical info and health goals in one easy place
         </p>
 
+        <!-- account actions -->
         <div class="button-group">
           <button type="button" id="register-button" class="btn btn-primary">
-            Create an account
+            <i class="ri-user-add-line"></i>
+            create an account
           </button>
+
           <button type="button" id="login-button" class="btn btn-outline">
-            Log in
+            <i class="ri-login-circle-line"></i>
+            log in
           </button>
         </div>
 
         <hr class="divider">
 
+        <!-- main navigation -->
         <div class="button-group">
           <button type="button" id="medical-info-button" class="btn btn-secondary">
-            Medical information
+            <i class="ri-stethoscope-line"></i>
+            medical information
           </button>
+
           <button type="button" id="health-goals-button" class="btn btn-secondary">
-            Health goals
+            <i class="ri-heart-3-line"></i>
+            health goals
           </button>
         </div>
 
+        <!-- logout -->
         <button id="logout-button" class="btn btn-logout">
-          Logout
+          <i class="ri-door-open-line"></i>
+          logout
         </button>
+
       </main>
     </div>
 

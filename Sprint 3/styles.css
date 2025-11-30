@@ -1,35 +1,49 @@
-/* Global font & lowercase text everywhere */
+/* global font & lowercase text everywhere */
 body {
-  font-family: 'Montserrat', sans-serif;
-  text-transform: lowercase; /* makes everything lowercase automatically */
+  font-family: 'montserrat', sans-serif;
+  text-transform: lowercase;
   margin: 0;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, #e0f2ff, #f5f7fb);
+
+  /* ✨ pantone-style clean pastel background */
+  background: #f5e9ff;   /* soft pastel lavender */
   color: #1f2933;
 }
 
-/* Make form controls lowercase as well */
-button, input, textarea, label, p, h1, h2, h3, h4, span {
+/* make form controls lowercase as well */
+button,
+input,
+textarea,
+label,
+p,
+h1,
+h2,
+h3,
+h4,
+span {
   text-transform: lowercase;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'montserrat', sans-serif;
 }
 
-/* Headers bold */
-h1, h2, h3, h4 {
+/* headers bold */
+h1,
+h2,
+h3,
+h4 {
   font-weight: 600;
 }
 
-/* Page wrapper for centered card */
+/* page wrapper for centered card */
 .page-wrapper {
   width: 100%;
   padding: 24px;
   box-sizing: border-box;
 }
 
-/* Card container */
+/* card container */
 .home-card {
   max-width: 480px;
   width: 100%;
@@ -63,7 +77,7 @@ h1, h2, h3, h4 {
   margin: 16px 0 20px;
 }
 
-/* Base button style */
+/* base button style */
 .btn {
   width: 100%;
   padding: 12px 16px;
@@ -71,7 +85,7 @@ h1, h2, h3, h4 {
   border-radius: 999px;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: 
+  transition:
     transform 0.08s ease,
     box-shadow 0.08s ease,
     background-color 0.15s ease,
@@ -79,20 +93,20 @@ h1, h2, h3, h4 {
     color 0.15s ease;
 }
 
-/* 🌸 LOGOUT = pastel red */
+/* 🌊 logout = pastel blue */
 .btn-logout {
-  background-color: #f7b4b4; /* pastel red */
-  color: white;
+  background-color: #b9d8ff; /* pastel blue */
+  color: #ffffff;
 }
 
 .btn-logout:hover {
-  background-color: #f28c8c;
+  background-color: #94c6ff;
 }
 
-/* 💜 PRIMARY ACTIONS = purple */
+/* 💜 primary actions = purple */
 .btn-primary {
   background-color: #6b4bff; /* purple */
-  color: white;
+  color: #ffffff;
   box-shadow: 0 10px 20px rgba(107, 75, 255, 0.35);
 }
 
@@ -102,9 +116,9 @@ h1, h2, h3, h4 {
   transform: translateY(-1px);
 }
 
-/* 💜 Outline purple for Login */
+/* 💜 outline purple for login / secondary actions */
 .btn-outline {
-  background-color: white;
+  background-color: #ffffff;
   color: #6b4bff;
   border: 2px solid #6b4bff;
 }
@@ -126,4 +140,50 @@ h1, h2, h3, h4 {
 /* generic hover animation */
 .btn:hover {
   transform: translateY(-1px);
+}
+
+/* forms */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+.form-group input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #6b4bff;
+  box-shadow: 0 0 0 3px rgba(107, 75, 255, 0.2);
+}
+
+/* inline rows (height, sleep goals, etc.) */
+.inline-input-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center; /* centers the pair */
+}
+
+.inline-input-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers labels above inputs */
+  gap: 4px;
+}
+
+.small-label {
+  font-size: 0.8rem;
+  color: #4b5563;
 }

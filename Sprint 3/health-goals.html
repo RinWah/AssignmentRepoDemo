@@ -3,87 +3,136 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Health Goals | Healthcare Tracker</title>
+    <title>health goals | healthcare tracker</title>
+
+    <!-- montserrat font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    >
+
+    <!-- icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- global styles -->
     <link rel="stylesheet" href="styles.css">
   </head>
+
   <body>
-    <h1>Healthcare Tracker</h1>
-    <h2>Health Goals</h2>
+    <div class="page-wrapper">
+      <main class="home-card">
+        <h1>
+          <i class="ri-sparkling-line"></i>
+          healthcare tracker
+        </h1>
+        <h2>
+          <i class="ri-heart-3-line"></i>
+          health goals
+        </h2>
 
-    <!-- READ-ONLY SECTION -->
-    <section id="health-goals-summary">
-      <h3>Current Goals</h3>
-      <p id="summary-weight"></p>
-      <p id="summary-sleep"></p>
-      <p id="summary-steps"></p>
-      <p id="summary-empty-message">
-        No goals set yet. Tap "Set Goals" to create them.
-      </p>
-    </section>
+        <!-- summary section -->
+        <section
+          id="health-goals-summary"
+          style="text-align: left; margin-top: 12px;"
+        >
+          <h3>current goals</h3>
+          <p id="summary-weight"></p>
+          <p id="summary-sleep"></p>
+          <p id="summary-steps"></p>
+          <p id="summary-empty-message">
+            no goals set yet. tap "set goals" to create them.
+          </p>
+        </section>
 
-    <!-- EDIT FORM (hidden until user taps Set/Change Goals) -->
-    <form id="health-goals-form" style="display: none;">
-      <div>
-        <label for="weight">Weight (lbs):</label>
-        <input
-          type="number"
-          id="weight"
-          name="weight"
-          min="1"
-          step="0.1"
-          required
-        />
-      </div>
+        <!-- edit form (hidden by default) -->
+        <form
+          id="health-goals-form"
+          class="form-group"
+          style="display: none; margin-top: 20px;"
+        >
+          <label for="weight">weight (lbs)</label>
+          <input
+            type="number"
+            id="weight"
+            name="weight"
+            min="1"
+            step="0.1"
+            required
+          >
 
-      <div>
-        <label for="sleep">Sleep:</label>
-        <input
-          type="number"
-          id="sleep-hours"
-          name="sleep-hours"
-          min="0"
-          max="24"
-          required
-        />
-        <span>hours</span>
+          <label for="sleep-hours">sleep goal</label>
+          <div class="inline-input-row">
+            <div class="inline-input-item">
+              <label class="small-label" for="sleep-hours">hours</label>
+              <input
+                type="number"
+                id="sleep-hours"
+                name="sleep-hours"
+                min="0"
+                max="24"
+                required
+              >
+            </div>
 
-        <input
-          type="number"
-          id="sleep-minutes"
-          name="sleep-minutes"
-          min="0"
-          max="59"
-          required
-        />
-        <span>minutes</span>
-      </div>
+            <div class="inline-input-item">
+              <label class="small-label" for="sleep-minutes">minutes</label>
+              <input
+                type="number"
+                id="sleep-minutes"
+                name="sleep-minutes"
+                min="0"
+                max="59"
+                required
+              >
+            </div>
+          </div>
 
-      <div>
-        <label for="steps">Steps:</label>
-        <input
-          type="number"
-          id="steps"
-          name="steps"
-          min="0"
-          max="200000"
-          required
-        />
-      </div>
+          <label for="steps">steps</label>
+          <input
+            type="number"
+            id="steps"
+            name="steps"
+            min="0"
+            max="200000"
+            required
+          >
 
-      <button type="button" id="health-goals-save-button">Save</button>
-    </form>
+          <button
+            type="button"
+            id="health-goals-save-button"
+            class="btn btn-primary"
+          >
+            <i class="ri-save-3-line"></i>
+            save goals
+          </button>
+        </form>
 
-    <!-- CONFIRMATION / ERROR MESSAGE -->
-    <p id="health-goals-message"></p>
+        <p id="health-goals-message"></p>
 
-    <!-- SET / CHANGE GOALS BUTTON AT BOTTOM -->
-    <button type="button" id="toggle-goals-form-button">
-      Set Goals
-    </button>
+        <button
+          type="button"
+          id="toggle-goals-form-button"
+          class="btn btn-secondary"
+          style="margin-top: 12px;"
+        >
+          <i class="ri-edit-2-line"></i>
+          set goals
+        </button>
 
-    <!-- Make sure this stays so JS runs -->
+        <button
+          type="button"
+          class="btn btn-outline"
+          style="margin-top: 12px;"
+          onclick="window.location.href='homepage.html'"
+        >
+          <i class="ri-arrow-left-line"></i>
+          back
+        </button>
+      </main>
+    </div>
+
+    <!-- keep this so js runs -->
     <script src="index.js" defer></script>
   </body>
 </html>

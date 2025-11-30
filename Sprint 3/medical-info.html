@@ -3,69 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Medical Information | Healthcare Tracker</title>
+    <title>medical information | healthcare tracker</title>
+
+    <!-- montserrat font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    >
+
+    <!-- icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- global styles -->
     <link rel="stylesheet" href="styles.css">
   </head>
+
   <body>
-    <h1>Healthcare Tracker</h1>
-    <h2>Medical Information</h2>
+    <div class="page-wrapper">
+      <main class="home-card">
+        <h1>
+          <i class="ri-sparkling-line"></i>
+          healthcare tracker
+        </h1>
+        <h2>
+          <i class="ri-stethoscope-line"></i>
+          medical information
+        </h2>
 
-    <form id="medical-info-form">
-      <div>
-        <label for="weight">Weight (lbs):</label>
-        <input
-          type="number"
-          id="weight"
-          name="weight"
-          min="1"
-          step="0.1"
-          required
-        />
-      </div>
+        <form id="medical-info-form" class="form-group">
+          <label for="weight">weight (lbs)</label>
+          <input
+            type="number"
+            id="weight"
+            name="weight"
+            min="1"
+            step="0.1"
+            required
+          >
 
-      <div>
-        <label for="height-feet">Height:</label>
-        <input
-          type="number"
-          id="height-feet"
-          name="height-feet"
-          min="1"
-          max="8"
-          required
-        />
-        <span>ft</span>
+          <label for="height-feet">height</label>
+          <div class="inline-input-row">
+            <div class="inline-input-item">
+              <label class="small-label" for="height-feet">feet</label>
+              <input
+                type="number"
+                id="height-feet"
+                name="height-feet"
+                min="1"
+                max="8"
+                required
+              >
+            </div>
 
-        <input
-          type="number"
-          id="height-inches"
-          name="height-inches"
-          min="0"
-          max="11"
-          required
-        />
-        <span>in</span>
-      </div>
+            <div class="inline-input-item">
+              <label class="small-label" for="height-inches">inches</label>
+              <input
+                type="number"
+                id="height-inches"
+                name="height-inches"
+                min="0"
+                max="11"
+                required
+              >
+            </div>
+          </div>
 
-      <div>
-        <label for="age">Age (years):</label>
-        <input
-          type="number"
-          id="age"
-          name="age"
-          min="1"
-          max="120"
-          required
-        />
-      </div>
+          <label for="age">age (years)</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            min="1"
+            max="120"
+            required
+          >
 
-      <button type="button" id="medical-info-save-button">Save</button>
-    </form>
+          <button
+            type="button"
+            id="medical-info-save-button"
+            class="btn btn-primary"
+          >
+            <i class="ri-save-3-line"></i>
+            save info
+          </button>
+        </form>
 
-    <p id="medical-info-message"></p>
+        <p id="medical-info-message"></p>
 
-    <!-- This is critical so index.js runs on this page -->
+        <button
+          type="button"
+          class="btn btn-outline"
+          style="margin-top: 12px;"
+          onclick="window.location.href='homepage.html'"
+        >
+          <i class="ri-arrow-left-line"></i>
+          back
+        </button>
+      </main>
+    </div>
+
+    <!-- keep this so js runs -->
     <script src="index.js" defer></script>
   </body>
 </html>
